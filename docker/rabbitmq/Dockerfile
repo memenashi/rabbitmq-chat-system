@@ -1,5 +1,2 @@
-FROM rabbitmq:latest
-RUN rabbitmq-plugins enable rabbitmq_web_stomp
-RUN rabbitmq-plugins enable rabbitmq_management
-ENV RABBITMQ_DEFAULT_USER=admin
-ENV RABBITMQ_DEFAULT_PASS=admin
+FROM rabbitmq:3-management
+RUN rabbitmq-plugins enable  rabbitmq_web_stomp

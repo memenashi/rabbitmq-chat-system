@@ -5,4 +5,5 @@ services:
     build: docker/rabbitmq
     ports:
       - "15672:15672"
+      - "15674:15674"
       - "5672:5672"
