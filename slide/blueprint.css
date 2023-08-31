@@ -1,0 +1,201 @@
+/* @theme blueprint */
+
+@import 'gaia';
+@import 'https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c';
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --theme-color: #044;
+  --font-color: white;
+  --cover-color: rgba(255, 255, 255, 0.2);
+  --background-cover-color: rgba(0, 0, 0, 0.2);
+  --base-weight: 500;
+  --h1-font-size: 64px;
+  --h2-font-size: 48px;
+  --h3-font-size: 32px;
+  font-size: 28px;
+}
+
+* {
+  /* font-family:Meiryo; */
+  font-weight: var(--base-weight);
+  font-family: 'Zen Maru Gothic', sans-serif;
+}
+
+a {
+  color: var(--font-color);
+  text-decoration: underline;
+}
+
+p,
+li,
+ul {
+  font-weight: calc(var(--base-weight) - 100);
+}
+
+code {
+  color: var(--font-color);
+  background-color: var(--cover-color);
+}
+
+section {
+  color: var(--font-color);
+  background-color: var(--theme-color);
+
+
+  /* background-image: url("https://www.vpj.co.jp/common/img/logo_vpj_white.png"); */
+  background-repeat: no-repeat;
+  background-attachment: absolute;
+  background-size: 35%;
+  background-position: 95% 95%;
+  z-index: -1;
+}
+
+section.title {
+  justify-content: center;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+section h1{
+  font-size: var(--h1-font-size);
+}
+
+section h2{
+  font-size: var(--h2-font-size);
+}
+
+section h3{
+  font-size: var(--h3-font-size);
+}
+
+section.title h1 {
+  font-size: 100px;
+}
+
+section.title h2 {
+  font-size: 64px;
+}
+
+section.section_title {
+  justify-content: center;
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--background-cover-color);
+  clip-path: polygon(100% 50%, 100% 100%, 30% 100%);
+  /* transform: skewY(-20deg) translateY(600px); */
+  overflow: hidden;
+  z-index: -1;
+}
+
+section.no_img::before {
+  background-color: var(--background-color);
+}
+
+section.no_img img{
+  max-width: 150vw;
+  max-height: 80vh;
+}
+
+
+h1>strong,
+h2>strong,
+h3>strong {
+  color: coral;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+
+blockquote {
+  font-size: 0.5em;
+}
+
+section .align_center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: 95%;
+}
+
+.double_column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}
+
+.double_column>* {
+  width: 50%;
+}
+
+/* 2カラム写真ページ */
+section.title_and_2img>div {
+  padding: 20px 0;
+  height: 55vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 2em;
+}
+
+section img {
+  object-fit: contain;
+  max-height: 55vh;
+}
+
+/* genre_grid ページ */
+
+section.genre_grid>ul {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-evenly;
+}
+
+section.genre_grid>ul>li {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: stretch;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+}
+
+section.genre_grid>ul>li>span {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 4.5em;
+  min-height: 5em;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0 1.5em;
+  flex-shrink: 0;
+}
+
+section.genre_grid>ul>li>ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
