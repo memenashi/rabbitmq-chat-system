@@ -1,32 +1,18 @@
 version: "3.8"
 
 services:
+  rabbitmq:
+    build: docker/rabbitmq
+    ports:
+      - "15672:15672"
+      - "15674:15674"
+      - "5672:5672"
+
   web:
-    image: node:14
-    volumes:
-      - ./web:/app
-    working_dir: /app
-    command: ["npm", "start"]
+    build:
+      dockerfile: docker/web/Dockerfile
+      context: .
     ports:
       - "3000:3000"
     depends_on:
-      - api
-
-  api:
-    image: node:14
-    volumes:
-      - ./api:/app
-    working_dir: /app
-    command: ["npm", "run", "start:dev"]
-    ports:
-      - "4000:4000"
-    environment:
-      - RABBITMQ_URL=amqp://rabbitmq
-    depends_on:
       - rabbitmq
-
-  rabbitmq:
-    image: "rabbitmq"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
