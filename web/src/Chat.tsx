@@ -1,71 +1,128 @@
-import { useState, useEffect, useRef } from "react";
-import { Client, Stomp } from "@stomp/stompjs";
+import { Button, Paper, Stack, Typography } from "@mui/material";
+import { FC, useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { date, object, string } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  DirectMessage,
+  EntireMessage,
+  Message,
+  useChatRoomClient,
+} from "./hooks/useChatRoomClient";
+import { SendMessageForm } from "./SendMessageForm";
+import { format } from "date-fns";
+import { MessageRow } from "./MessageRow";
 
-function Chat() {
-  const clientRef = useRef<Client | undefined>(undefined);
-  const [messages, setMessages] = useState<string[]>([]);
-  const [input, setInput] = useState("");
-
-  const getStompClient = () => {
-    if (clientRef.current) return clientRef.current;
-    // const ws = new WebSocket("ws://127.0.0.1:15674/ws");
-    // clientRef.current = Stomp.over(ws);
-
-    const client = new Client({
-      brokerURL: "ws://localhost:15674/ws",
-      connectHeaders: {
-        login: "guest",
-        passcode: "guest",
-        host: "/",
-      },
-      onConnect: () => {
-        console.log("onConnect");
-        client.subscribe("/topic/messages", (message) => {
-          console.log("message", message);
-          setMessages((prev) => [...prev, message.body]);
-        });
-      },
-      debug: (str) => {
-        console.debug(str);
-      },
-    });
-    clientRef.current = client;
-    return clientRef.current;
-  };
-
-  useEffect(() => {
-    const stompClient = getStompClient();
-    console.log("connecting", { stompClient });
-
-    console.log("connecting");
-    if (!stompClient.active) stompClient.activate();
-    return () => {
-      if (stompClient == null) return;
-      if (stompClient.connected) stompClient.deactivate();
-    };
-  }, []);
-
-  const sendMessage = () => {
-    if (clientRef.current) {
-      clientRef.current.publish({
-        destination: "/topic/messages",
-        body: input,
-      });
-      setInput("");
-    }
-  };
-
-  return (
-    <div>
-      <div>
-        {messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
-        ))}
-      </div>
-      <input value={input} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={sendMessage}>Send</button>
-    </div>
-  );
+export interface LoginInfo {
+  username: string;
+  hostname: string;
 }
 
-export default Chat;
+const schema = object().shape({
+  body: string().min(1).max(256).required(),
+  type: string().oneOf(["message", "direct"]).required(),
+  to: string().when({
+    is: "direct",
+    then: (schema) => schema.min(1).max(16).required(),
+    otherwise: (schema) => schema.nullable(),
+  }),
+  from: string().required(),
+  publishDateTime: date().required(),
+});
+
+export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
+  const { sendMessage, messages, close } = useChatRoomClient({
+    ...props,
+  });
+
+  const handleSendMessage = useCallback((message: EntireMessage) => {
+    sendMessage({
+      ...message,
+      publishDateTime: new Date(),
+      from: props.username,
+    });
+  }, []);
+
+  const handleClose = useCallback(() => {
+    const leaveMessage: Message = {
+      type: "leave",
+      body: `${props.username} left`,
+      from: props.username,
+      publishDateTime: new Date(),
+    };
+    sendMessage(leaveMessage);
+    close();
+    props.onLogout();
+  }, []);
+
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors },
+  } = useForm<EntireMessage>({
+    defaultValues: {
+      body: "",
+      type: "message",
+      from: props.username,
+      publishDateTime: new Date(),
+    },
+    resolver: yupResolver(schema) as any,
+  });
+
+  return (
+    <Stack
+      gap={2}
+      height="100vh"
+      maxHeight="100vh"
+      minHeight="0"
+      padding={2}
+      overflow="auto"
+    >
+      <Paper
+        elevation={4}
+        sx={{
+          padding: 2,
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "auto",
+        }}
+      >
+        <Stack
+          direction="row"
+          alignItems="baseline"
+          justifyContent="space-between"
+          gap={1}
+        >
+          <Typography variant="h4">Chat</Typography>
+          <Typography variant="body1">{`hello ${props.username}`}</Typography>
+          <Button onClick={handleClose}>Logout</Button>
+        </Stack>
+        {messages.length ? (
+          <Stack
+            gap={1}
+            sx={{ overflowY: "auto" }}
+            flex={1}
+            justifyContent="flex-end"
+          >
+            {messages.map((message) => (
+              <MessageRow
+                key={message.publishDateTime.toLocaleString()}
+                {...message}
+              />
+            ))}
+          </Stack>
+        ) : null}
+      </Paper>
+      <Paper sx={{ padding: 2 }}>
+        <SendMessageForm
+          control={control}
+          register={register}
+          errors={errors}
+          onSubmit={handleSubmit(handleSendMessage)}
+        />
+      </Paper>
+    </Stack>
+  );
+};

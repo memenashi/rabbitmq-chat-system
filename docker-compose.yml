@@ -7,3 +7,12 @@ services:
       - "15672:15672"
       - "15674:15674"
       - "5672:5672"
+
+  web:
+    build:
+      dockerfile: docker/web/Dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rabbitmq
