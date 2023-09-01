@@ -53,6 +53,12 @@ theme: blueprint
 
 ---
 
+## Patterns of Message Queuing
+
+![img](queue.drawio.png)
+
+---
+
 <!--_class: section_title-->
 
 ## 2. Why Use Message Queuing
