@@ -35,13 +35,6 @@ export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
     ...props,
   });
 
-  const handleSendMessage = useCallback((message: EntireMessage) => {
-    sendMessage({
-      ...message,
-      publishDateTime: new Date(),
-      from: props.username,
-    });
-  }, []);
 
   const handleClose = useCallback(() => {
     const leaveMessage: Message = {
@@ -59,6 +52,7 @@ export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
     handleSubmit,
     register,
     control,
+    reset,
     formState: { errors },
   } = useForm<EntireMessage>({
     defaultValues: {
@@ -69,6 +63,16 @@ export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
     },
     resolver: yupResolver(schema) as any,
   });
+
+  
+  const handleSendMessage = useCallback((message: EntireMessage) => {
+    sendMessage({
+      ...message,
+      publishDateTime: new Date(),
+      from: props.username,
+    });
+    reset();
+  }, []);
 
   return (
     <Stack

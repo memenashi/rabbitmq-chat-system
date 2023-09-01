@@ -31,6 +31,7 @@ export const useChatRoomClient = ({
 }: UseChatRoomClientProps) => {
   const clientRef = useRef<Client | undefined>(undefined);
   const [messages, setMessages] = useState<(Message | DirectMessage)[]>([]);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const addMessage = useCallback((message: Message | DirectMessage) => {
     setMessages((prev) => [...prev, message]);
@@ -58,6 +59,7 @@ export const useChatRoomClient = ({
           console.log("directMessage", message);
           addMessage(JSON.parse(message.body) as DirectMessage);
         });
+        if(loggedIn)return;
         const joinMessage: Message = {
           type: "join",
           publishDateTime: new Date(),
@@ -68,6 +70,7 @@ export const useChatRoomClient = ({
           destination: "/topic/messages",
           body: JSON.stringify(joinMessage),
         });
+        setLoggedIn(true);
       },
       debug: (str) => {
         console.debug(str);
@@ -113,8 +116,9 @@ export const useChatRoomClient = ({
   }, []);
 
   const close = useCallback(() => {
-    if (clientRef.current == null) return;
-    clientRef.current.deactivate();
+    if (clientRef.current != null) {
+    clientRef.current.deactivate();}
+    setLoggedIn(false);
   }, []);
 
   return { sendMessage, messages, close };
