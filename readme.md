@@ -5,6 +5,10 @@
 This is a simple chat system using Rabbit MQ as a message broker.
 It is written in typescript and uses the amqplib library to connect to Rabbit MQ.
 
+## How to run
+
+all you need is to run `docker compose up -d`
+
 ## Directories
 
 ### api
