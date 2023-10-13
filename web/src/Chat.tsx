@@ -35,7 +35,6 @@ export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
     ...props,
   });
 
-
   const handleClose = useCallback(() => {
     const leaveMessage: Message = {
       type: "leave",
@@ -64,7 +63,6 @@ export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
     resolver: yupResolver(schema) as any,
   });
 
-  
   const handleSendMessage = useCallback((message: EntireMessage) => {
     sendMessage({
       ...message,

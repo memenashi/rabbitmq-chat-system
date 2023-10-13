@@ -59,7 +59,7 @@ export const useChatRoomClient = ({
           console.log("directMessage", message);
           addMessage(JSON.parse(message.body) as DirectMessage);
         });
-        if(loginRef.current)return;
+        if (loginRef.current) return;
         const joinMessage: Message = {
           type: "join",
           publishDateTime: new Date(),
@@ -117,7 +117,8 @@ export const useChatRoomClient = ({
 
   const close = useCallback(() => {
     if (clientRef.current != null) {
-    clientRef.current.deactivate();}
+      clientRef.current.deactivate();
+    }
     loginRef.current = false;
   }, []);
 
