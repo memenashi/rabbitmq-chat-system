@@ -4,5 +4,6 @@
   ],
   "cSpell.words": [
     "Rasics"
-  ]
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

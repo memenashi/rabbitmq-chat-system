@@ -28,18 +28,23 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-mongoose.connect('mongodb://localhost:27017/chat').then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('Failed to connect to MongoDB:', err);
-});
-
 app.get('/', (req, res) => {
   res.send('Hello, Chat Server!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
-});
-
 app.use('/api', userRouter);
+
+async function main(){
+  try {
+    await mongoose.connect('mongodb://localhost:27017/chat').catch(err => {
+      console.error('Failed to connect to MongoDB:', err);
+    });
+    app.listen(PORT, () => {
+      console.log(`Server is running at http://localhost:${PORT}`);
+    });
+   }catch (e){
+    console.log(e)
+  }
+}
+
+main();

@@ -17,7 +17,7 @@ services:
     depends_on:
       - rabbitmq
 
-  mongodb:
+  db:
     image: mongo:latest
     ports:
       - "27017:27017"
