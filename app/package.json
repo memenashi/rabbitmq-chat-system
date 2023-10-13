@@ -1,0 +1,20 @@
+{
+  "name": "rabbit-mq-chat-app",
+  "version": "1.0.0",
+  "description": "Application server for chat system",
+  "main": "index.ts",
+  "author": "memenashi",
+  "license": "UNLICENSED",
+  "private": true,
+  "packageManager": "yarn@3.6.4",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.6.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.19",
+    "@types/node": "^20.8.5"
+  }
+}
