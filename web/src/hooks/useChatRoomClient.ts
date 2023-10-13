@@ -1,4 +1,4 @@
-import { ActivationState, Client } from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface MessageBase {
