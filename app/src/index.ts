@@ -1,8 +1,8 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsDoc from 'swagger-jsdoc';
-import { userRouter } from './user/user';
+import express from "express";
+import mongoose from "mongoose";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
+import { userRouter } from "./user/user";
 
 const app = express();
 const PORT = 3000;
@@ -10,40 +10,41 @@ const PORT = 3000;
 // Swaggerのオプション設定
 const swaggerOptions = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Chat Server API',
-      version: '1.0.0',
-      description: 'API documentation for the chat server'
+      title: "Chat Server API",
+      version: "1.0.0",
+      description: "API documentation for the chat server",
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`
-      }
-    ]
+        url: `http://localhost:${PORT}`,
+      },
+    ],
   },
-  apis: ['./src/**/*.ts'] // APIの定義が書かれているファイルのパス
+  apis: ["./src/**/*.ts"], // APIの定義が書かれているファイルのパス
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.get('/', (req, res) => {
-  res.send('Hello, Chat Server!');
+app.get("/", (req, res) => {
+  res.send("Hello, Chat Server!");
 });
 
-app.use('/api', userRouter);
+app.use("/api", userRouter);
 
-async function main(){
+async function main() {
+  console.log("starting server...");
   try {
-    await mongoose.connect('mongodb://localhost:27017/chat').catch(err => {
-      console.error('Failed to connect to MongoDB:', err);
-    });
+    console.log("connecting to mongodb...");
+    await mongoose.connect("mongodb://localhost:27017/chat");
     app.listen(PORT, () => {
       console.log(`Server is running at http://localhost:${PORT}`);
     });
-   }catch (e){
-    console.log(e)
+  } catch (e) {
+    console.error("server error");
+    console.log(e);
   }
 }
 

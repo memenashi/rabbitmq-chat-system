@@ -1,5 +1,5 @@
 {
-  "name": "rabbit-mq-chat-app",
+  "name": "app",
   "version": "1.0.0",
   "description": "Application server for chat system",
   "main": "index.ts",

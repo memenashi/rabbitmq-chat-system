@@ -2867,6 +2867,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"app@workspace:app":
+  version: 0.0.0-use.local
+  resolution: "app@workspace:app"
+  dependencies:
+    express: ^4.18.2
+    mongoose: ^7.6.1
+    swagger-jsdoc: ^6.2.8
+    swagger-ui-express: ^5.0.0
+    ts-node: ^10.9.1
+    typescript: ^5.2.2
+  languageName: unknown
+  linkType: soft
+
 "aproba@npm:^1.0.3 || ^2.0.0":
   version: 2.0.0
   resolution: "aproba@npm:2.0.0"
@@ -6572,19 +6585,6 @@ __metadata:
   checksum: b676f8c040cdc5b12723ad2f91414d267605b26419d5c821ff03befa817ddd10e238d22b25d604920340fd73efd8ba795465a0377c4adf45a4a41e4234e42dc4
   languageName: node
   linkType: hard
-
-"rabbit-mq-chat-app@workspace:app":
-  version: 0.0.0-use.local
-  resolution: "rabbit-mq-chat-app@workspace:app"
-  dependencies:
-    express: ^4.18.2
-    mongoose: ^7.6.1
-    swagger-jsdoc: ^6.2.8
-    swagger-ui-express: ^5.0.0
-    ts-node: ^10.9.1
-    typescript: ^5.2.2
-  languageName: unknown
-  linkType: soft
 
 "rabbitmq-chat@workspace:.":
   version: 0.0.0-use.local
