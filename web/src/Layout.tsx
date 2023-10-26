@@ -4,6 +4,8 @@ import { Outlet } from "react-router-dom";
 
 const Background = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
+  display: "flex",
+  flexDirection: "column",
   height: "100vh",
   width: "100vw",
 }));

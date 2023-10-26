@@ -44,9 +44,13 @@ const LoginBackground = styled(Stack)(({ theme }) => ({
   justifyContent: "center",
 }));
 
+const StyledForm = styled("form")(({ theme }) => ({
+  width: "100%",
+}));
+
 export const Login: FC = () => {
   const nav = useNavigate();
-  const { isSuccess, refetch } = useLoginUser();
+  const { status, refetch } = useLoginUser();
   const {
     register,
     handleSubmit,
@@ -62,14 +66,13 @@ export const Login: FC = () => {
   const handleLogin = useCallback(
     (data: LoginRequest) =>
       userApi.userControllerLogin(data).then(() => {
-        nav("/");
         refetch();
       }),
-    [register],
+    [refetch],
   );
 
   if (status == "success") {
-    console.log("page blocked");
+    console.log("page blocked in login");
     return <Navigate to="/" />;
   }
 
@@ -78,7 +81,7 @@ export const Login: FC = () => {
       <LoginPaper>
         <Stack alignItems="center" gap={2}>
           <Typography variant="h3">おかえりなさい！</Typography>
-          <form onSubmit={handleSubmit(handleLogin)}>
+          <StyledForm onSubmit={handleSubmit(handleLogin)}>
             <Stack gap={2} width="100%">
               <TextField {...register("email")} label="メールアドレス" />
               {errors.email && (
@@ -92,7 +95,7 @@ export const Login: FC = () => {
                 Login
               </Button>
             </Stack>
-          </form>
+          </StyledForm>
           <Typography variant="body1">はじめましてだったかな？</Typography>
           <Button
             variant="outlined"
