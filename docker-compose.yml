@@ -2,17 +2,46 @@ version: "3.8"
 
 services:
   rabbitmq:
-    build: docker/rabbitmq
+    build:
+      dockerfile: docker/Dockerfile.rabbitmq
     ports:
       - "15672:15672"
       - "15674:15674"
       - "5672:5672"
 
   web:
-    build:
-      dockerfile: docker/web/Dockerfile
-      context: .
+    image: rabbit_chat:latest
     ports:
-      - "8080:3000"
+      - "8080:3200"
+    depends_on:
+      - app
+      - rabbitmq
+    command: [ "yarn", "workspace", "web", "start" ]
+
+  app:
+    build:
+      dockerfile: docker/Dockerfile.app
+      context: .
+    image: rabbit_chat:latest
+    ports:
+      - "8081:3201"
     depends_on:
       - rabbitmq
+    environment:
+      - MONGO_URL=mongodb://db:27017
+    command: [ "yarn", "workspace", "app", "start" ]
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123root
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
+
+

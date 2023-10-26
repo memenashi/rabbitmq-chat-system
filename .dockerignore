@@ -1,0 +1,13 @@
+.devcontainer
+.yarn/*
+!.yarn/releases
+.vscode
+node_modules
+slide
+docker-compose.yml
+.git*
+.env
+readme.md
+docker
+build
+dist
