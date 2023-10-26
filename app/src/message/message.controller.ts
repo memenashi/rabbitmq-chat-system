@@ -51,7 +51,7 @@ export class MessageController {
   })
   @ApiOkResponse({
     description: 'List of messages before the specified message',
-    type: [MessageResource],
+    type: MessageResource,
     isArray: true,
   })
   async findBeforeLastMessage(
