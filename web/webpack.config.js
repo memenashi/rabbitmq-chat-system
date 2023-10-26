@@ -34,7 +34,13 @@ module.exports = {
     static: {
       directory: path.join(__dirname, "public"),
     },
-    port: 3000,
+    port: 3200,
+    proxy: {
+      "/api": {
+        target: process.env.API_SERVER || "http://localhost:3200",
+        pathRewrite: { "^/api": "" },
+      }
+    }
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
