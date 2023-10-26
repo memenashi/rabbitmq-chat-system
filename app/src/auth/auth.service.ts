@@ -14,17 +14,17 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.userModel.findOne({ username });
+  async validateUser(email: string, password: string) {
+    const user = await this.userModel.findOne({ email });
     if (user && password != user.password) {
       throw new UnauthorizedException();
     }
     return user;
   }
 
-  async login({ username, password }: LoginRequest, res: Response) {
+  async login({ email, password }: LoginRequest, res: Response) {
     console.log('validating user');
-    const user = await this.validateUser(username, password);
+    const user = await this.validateUser(email, password);
     console.log('user', user);
     const payload = { username: user.username, sub: user._id }; // _idを含めることでユーザーを特定
     const token = this.jwtService.sign(payload);

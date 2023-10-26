@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Get,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
@@ -7,6 +15,7 @@ import { UserResource } from './dto/user.resource';
 import { LoginRequest } from './dto/login.request';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginResource } from './dto/login.resource';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
 @Controller('users')
@@ -49,5 +58,14 @@ export class UserController {
     await this.authService.login(LoginRequest, res);
     console.log('login successful');
     res.send({ message: 'Login successful' });
+  }
+
+  @Get('info')
+  @UseGuards(AuthGuard('jwt'))
+  async info(@Req() req: any): Promise<UserResource> {
+    return {
+      username: req.user.username,
+      email: req.user.email,
+    };
   }
 }
