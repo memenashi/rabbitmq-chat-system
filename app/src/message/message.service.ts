@@ -4,11 +4,18 @@ import { Model } from 'mongoose';
 import { Message, MessageDocument } from './schemas/message.schema';
 import { User } from 'src/user/schemas/user.schema';
 import { MessageResource, MessageType } from './dto/message.resource';
+import {
+  Subscription,
+  SubscriptionDocument,
+} from '../user/schemas/subscription.schema';
+import * as webpush from 'web-push';
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
+    @InjectModel(Subscription.name)
+    private subscriptionModel: Model<SubscriptionDocument>,
   ) {}
 
   async create(
@@ -56,5 +63,17 @@ export class MessageService {
       return this.messageModel.find({ _id: { $lt: lastMessageId } });
     }
     return this.messageModel.find().sort({ _id: -1 });
+  }
+
+  async sendNotification(message: MessageResource) {
+    const subscriptions = await this.subscriptionModel.find();
+    const payload = JSON.stringify({
+      title: 'New Message',
+      body: message.content,
+    });
+
+    subscriptions.forEach((sub) => {
+      webpush.sendNotification(sub, payload);
+    });
   }
 }

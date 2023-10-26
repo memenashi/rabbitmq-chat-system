@@ -26,6 +26,7 @@ export class MessageController {
       userId,
       createMessageDto.type,
     ); // DTOからcontentを取得
+    this.messageService.sendNotification(message);
     return message;
   }
 
