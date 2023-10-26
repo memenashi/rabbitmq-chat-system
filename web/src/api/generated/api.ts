@@ -178,6 +178,50 @@ export type PostMessageRequestTypeEnum = typeof PostMessageRequestTypeEnum[keyof
 /**
  * 
  * @export
+ * @interface SubscribeRequest
+ */
+export interface SubscribeRequest {
+    /**
+     * Endpoint for the push subscription.
+     * @type {string}
+     * @memberof SubscribeRequest
+     */
+    'endpoint': string;
+    /**
+     * Expiration time for the push subscription.
+     * @type {string}
+     * @memberof SubscribeRequest
+     */
+    'expirationTime': string | null;
+    /**
+     * 
+     * @type {SubscribeRequestKeys}
+     * @memberof SubscribeRequest
+     */
+    'keys': SubscribeRequestKeys;
+}
+/**
+ * Keys for the push subscription.
+ * @export
+ * @interface SubscribeRequestKeys
+ */
+export interface SubscribeRequestKeys {
+    /**
+     * P256dh key for the push subscription.
+     * @type {string}
+     * @memberof SubscribeRequestKeys
+     */
+    'p256dh'?: string;
+    /**
+     * Auth key for the push subscription.
+     * @type {string}
+     * @memberof SubscribeRequestKeys
+     */
+    'auth'?: string;
+}
+/**
+ * 
+ * @export
  * @interface UserResource
  */
 export interface UserResource {
@@ -593,6 +637,41 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {SubscribeRequest} subscribeRequest Subscription
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSubscribe: async (subscribeRequest: SubscribeRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'subscribeRequest' is not null or undefined
+            assertParamExists('userControllerSubscribe', 'subscribeRequest', subscribeRequest)
+            const localVarPath = `/users/subscribe`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(subscribeRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -641,6 +720,16 @@ export const UsersApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerRegister(createUserDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {SubscribeRequest} subscribeRequest Subscription
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerSubscribe(subscribeRequest: SubscribeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerSubscribe(subscribeRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -684,6 +773,15 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          */
         userControllerRegister(createUserDto: CreateUserDto, options?: any): AxiosPromise<UserResource> {
             return localVarFp.userControllerRegister(createUserDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {SubscribeRequest} subscribeRequest Subscription
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSubscribe(subscribeRequest: SubscribeRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.userControllerSubscribe(subscribeRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -735,6 +833,17 @@ export class UsersApi extends BaseAPI {
      */
     public userControllerRegister(createUserDto: CreateUserDto, options?: AxiosRequestConfig) {
         return UsersApiFp(this.configuration).userControllerRegister(createUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {SubscribeRequest} subscribeRequest Subscription
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public userControllerSubscribe(subscribeRequest: SubscribeRequest, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerSubscribe(subscribeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
