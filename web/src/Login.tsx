@@ -50,7 +50,7 @@ const StyledForm = styled("form")(({ theme }) => ({
 
 export const Login: FC = () => {
   const nav = useNavigate();
-  const { status, refetch } = useLoginUser();
+  const { data, status, refetch } = useLoginUser();
   const {
     register,
     handleSubmit,
@@ -71,7 +71,7 @@ export const Login: FC = () => {
     [refetch],
   );
 
-  if (status == "success") {
+  if (data && status == "success") {
     console.log("page blocked in login");
     return <Navigate to="/" />;
   }

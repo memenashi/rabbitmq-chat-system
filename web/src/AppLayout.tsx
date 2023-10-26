@@ -6,28 +6,19 @@ import { userApi } from "./api";
 import e from "express";
 import { isAxiosError } from "axios";
 import { useLoginUser } from "./hooks/useLoginUser";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AppLayout: FC = () => {
   const nav = useNavigate();
+  const queryClient = useQueryClient();
   const { refetch } = useLoginUser();
-  const handleLogout = useCallback(
-    () =>
-      userApi
-        .userControllerLogout()
-        .then(() => {
-          refetch();
-          nav("/login");
-        })
-        .catch((e: { response: any }) => {
-          if (isAxiosError(e)) {
-            refetch();
-            e.response.status === 401
-              ? nav("/login")
-              : console.log(e.response.status);
-          }
-        }),
-    [],
-  );
+  const handleLogout = useCallback(async () => {
+    try {
+      await userApi.userControllerLogout();
+    } catch (e) {}
+    queryClient.clear();
+    nav("/login");
+  }, [refetch, nav]);
   return (
     <Layout>
       <AppBar>
