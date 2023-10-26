@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   rabbitmq:
-    build: docker/rabbitmq
+    build: docker/Dockerfile.rabbitmq
     ports:
       - "15672:15672"
       - "15674:15674"
@@ -12,12 +12,25 @@ services:
 
   web:
     build:
-      dockerfile: docker/web/Dockerfile
+      dockerfile: docker/Dockerfile.app
       context: .
     ports:
       - "8080:3000"
     depends_on:
       - rabbitmq
+    command: [ "yarn", "workspace", "web", "start" ]
+    networks:
+      - default
+
+  app:
+    build:
+      dockerfile: docker/Dockerfile.app
+      context: .
+    ports:
+      - "8081:3000"
+    depends_on:
+      - rabbitmq
+    command: [ "yarn", "workspace", "app", "start" ]
     networks:
       - default
 
