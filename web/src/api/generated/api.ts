@@ -51,6 +51,25 @@ export interface CreateUserDto {
 /**
  * 
  * @export
+ * @interface GetMessagesRequest
+ */
+export interface GetMessagesRequest {
+    /**
+     * The ID of the last loaded message
+     * @type {string}
+     * @memberof GetMessagesRequest
+     */
+    'lastMessageId'?: string;
+    /**
+     * The number of messages to load
+     * @type {number}
+     * @memberof GetMessagesRequest
+     */
+    'limit': number;
+}
+/**
+ * 
+ * @export
  * @interface LoginRequest
  */
 export interface LoginRequest {
@@ -314,15 +333,14 @@ export const MessagesApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
-         * @param {string} lastMessageId ID of the last loaded message
-         * @param {number} [limit] Number of messages to load
+         * @param {GetMessagesRequest} getMessagesRequest Entire Message find request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindBeforeLastMessage: async (lastMessageId: string, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'lastMessageId' is not null or undefined
-            assertParamExists('messageControllerFindBeforeLastMessage', 'lastMessageId', lastMessageId)
-            const localVarPath = `/messages`;
+        messageControllerFindBeforeLastMessage: async (getMessagesRequest: GetMessagesRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getMessagesRequest' is not null or undefined
+            assertParamExists('messageControllerFindBeforeLastMessage', 'getMessagesRequest', getMessagesRequest)
+            const localVarPath = `/messages/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -330,23 +348,18 @@ export const MessagesApiAxiosParamCreator = function (configuration?: Configurat
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (lastMessageId !== undefined) {
-                localVarQueryParameter['lastMessageId'] = lastMessageId;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getMessagesRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -375,13 +388,12 @@ export const MessagesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} lastMessageId ID of the last loaded message
-         * @param {number} [limit] Number of messages to load
+         * @param {GetMessagesRequest} getMessagesRequest Entire Message find request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageResource>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindBeforeLastMessage(lastMessageId, limit, options);
+        async messageControllerFindBeforeLastMessage(getMessagesRequest: GetMessagesRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageResource>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindBeforeLastMessage(getMessagesRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -405,13 +417,12 @@ export const MessagesApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
-         * @param {string} lastMessageId ID of the last loaded message
-         * @param {number} [limit] Number of messages to load
+         * @param {GetMessagesRequest} getMessagesRequest Entire Message find request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: any): AxiosPromise<Array<MessageResource>> {
-            return localVarFp.messageControllerFindBeforeLastMessage(lastMessageId, limit, options).then((request) => request(axios, basePath));
+        messageControllerFindBeforeLastMessage(getMessagesRequest: GetMessagesRequest, options?: any): AxiosPromise<Array<MessageResource>> {
+            return localVarFp.messageControllerFindBeforeLastMessage(getMessagesRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -436,14 +447,13 @@ export class MessagesApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} lastMessageId ID of the last loaded message
-     * @param {number} [limit] Number of messages to load
+     * @param {GetMessagesRequest} getMessagesRequest Entire Message find request
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MessagesApi
      */
-    public messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: AxiosRequestConfig) {
-        return MessagesApiFp(this.configuration).messageControllerFindBeforeLastMessage(lastMessageId, limit, options).then((request) => request(this.axios, this.basePath));
+    public messageControllerFindBeforeLastMessage(getMessagesRequest: GetMessagesRequest, options?: AxiosRequestConfig) {
+        return MessagesApiFp(this.configuration).messageControllerFindBeforeLastMessage(getMessagesRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
