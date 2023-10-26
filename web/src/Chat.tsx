@@ -15,7 +15,7 @@ import { MessageRow } from "./MessageRow";
 
 export interface LoginInfo {
   username: string;
-  hostname: string;
+  password: string;
 }
 
 const schema = object().shape({
@@ -30,48 +30,7 @@ const schema = object().shape({
   publishDateTime: date().required(),
 });
 
-export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
-  const { sendMessage, messages, close } = useChatRoomClient({
-    ...props,
-  });
-
-  const handleClose = useCallback(() => {
-    const leaveMessage: Message = {
-      type: "leave",
-      body: `${props.username} left`,
-      from: props.username,
-      publishDateTime: new Date(),
-    };
-    sendMessage(leaveMessage);
-    close();
-    props.onLogout();
-  }, []);
-
-  const {
-    handleSubmit,
-    register,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<EntireMessage>({
-    defaultValues: {
-      body: "",
-      type: "message",
-      from: props.username,
-      publishDateTime: new Date(),
-    },
-    resolver: yupResolver(schema) as any,
-  });
-
-  const handleSendMessage = useCallback((message: EntireMessage) => {
-    sendMessage({
-      ...message,
-      publishDateTime: new Date(),
-      from: props.username,
-    });
-    reset();
-  }, []);
-
+export const Chat: FC = (props) => {
   return (
     <Stack
       gap={2}
@@ -98,32 +57,7 @@ export const Chat: FC<LoginInfo & { onLogout: () => void }> = (props) => {
           gap={1}
         >
           <Typography variant="h4">Chat</Typography>
-          <Typography variant="body1">{`hello ${props.username}`}</Typography>
-          <Button onClick={handleClose}>Logout</Button>
         </Stack>
-        {messages.length ? (
-          <Stack
-            gap={1}
-            sx={{ overflowY: "auto" }}
-            flex={1}
-            justifyContent="flex-end"
-          >
-            {messages.map((message) => (
-              <MessageRow
-                key={message.publishDateTime.toLocaleString()}
-                {...message}
-              />
-            ))}
-          </Stack>
-        ) : null}
-      </Paper>
-      <Paper sx={{ padding: 2 }}>
-        <SendMessageForm
-          control={control}
-          register={register}
-          errors={errors}
-          onSubmit={handleSubmit(handleSendMessage)}
-        />
       </Paper>
     </Stack>
   );

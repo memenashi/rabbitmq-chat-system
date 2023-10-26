@@ -1,6 +1,11 @@
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { setLocale } from "yup";
+import { ja } from "yup-locales";
 
+setLocale(ja);
 const container = document.getElementById("root");
-const root = createRoot(container as any);
-root.render(<App />);
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
+}
