@@ -13,4 +13,22 @@ export class MessageService {
     const newMessage = new this.messageModel({ content, userId });
     return newMessage.save();
   }
+
+  async findBeforeLastMessage(
+    lastMessageId?: string,
+    limit = 50,
+  ): Promise<Message[]> {
+    if (lastMessageId) {
+      return this.messageModel
+        .find({ _id: { $lt: lastMessageId } }) // 最後のメッセージIDより前のメッセージを検索
+        .limit(limit)
+        .exec();
+    } else {
+      return this.messageModel
+        .find()
+        .sort({ _id: -1 }) // 最新のメッセージから取得
+        .limit(limit)
+        .exec();
+    }
+  }
 }

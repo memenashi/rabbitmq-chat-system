@@ -13,6 +13,9 @@ export class Message {
 
   @Prop({ default: Date.now })
   createdAt: Date;
+
+  @Prop({ default: () => 'message' })
+  type: 'message' | 'join' | 'leave' | 'direct';
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
