@@ -9,23 +9,28 @@ services:
       - "15674:15674"
       - "5672:5672"
 
-  web:
+  base_service:
     build:
       dockerfile: docker/Dockerfile.app
       context: .
+    image: rabbit_chat:latest
+    
+
+  web:
+    image: rabbit_chat:latest
     ports:
       - "8080:3200"
     depends_on:
+      - base_service
       - rabbitmq
     command: [ "yarn", "workspace", "web", "start" ]
 
   app:
-    build:
-      dockerfile: docker/Dockerfile.app
-      context: .
+    image: rabbit_chat:latest
     ports:
       - "8081:3201"
     depends_on:
+      - base_service
       - rabbitmq
     command: [ "yarn", "workspace", "app", "start" ]
 
