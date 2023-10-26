@@ -25,7 +25,9 @@ export const AppLayout: FC = () => {
         <Toolbar>
           <Stack direction="row" justifyContent="space-between" width="100%">
             <Typography variant="h4">Rabbit-Chat</Typography>
-            <Button onClick={handleLogout}>Logout</Button>
+            <Stack direction="row">
+              <Button onClick={handleLogout}>Logout</Button>
+            </Stack>
           </Stack>
         </Toolbar>
       </AppBar>
