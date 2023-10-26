@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetMessagesDto {
+export class GetMessagesRequest {
   @ApiProperty({
     description: 'The ID of the last loaded message',
     required: false,

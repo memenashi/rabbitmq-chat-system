@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MessageService } from './message.service';
-import { MessageDto } from './dto/message.dto'; // MessageDtoとMessageTypeをインポート
-import { GetMessagesDto } from './dto/get-messages.dto';
+import { MessageDto } from './dto/message.resource'; // MessageDtoとMessageTypeをインポート
+import { GetMessagesRequest } from './dto/get-messages.request';
 import { Message } from './schemas/message.schema';
 
 @ApiTags('messages') // Swagger UIに`messages`タグを付ける
@@ -40,7 +40,7 @@ export class MessageController {
     description: 'List of messages before the specified message',
   })
   async findBeforeLastMessage(
-    @Query() getMessagesDto: GetMessagesDto,
+    @Query() getMessagesDto: GetMessagesRequest,
   ): Promise<Message[]> {
     return this.messageService.findBeforeLastMessage(
       getMessagesDto.lastMessageId,

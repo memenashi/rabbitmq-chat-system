@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserResource } from 'src/user/dto/user.resource';
 
 export enum MessageType {
   MESSAGE = 'message',
@@ -12,4 +13,7 @@ export class MessageDto {
   content: string;
   @ApiProperty({ description: 'The type of the message', enum: MessageType })
   type: MessageType;
+  createdAt: Date;
+  user: UserResource;
+
 }

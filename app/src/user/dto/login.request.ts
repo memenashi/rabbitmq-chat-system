@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class LoginDto {
+export class LoginRequest {
   @ApiProperty({ description: 'The unique username of the user' })
   username: string;
 
