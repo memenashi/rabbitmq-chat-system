@@ -521,6 +521,35 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerLogout: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {CreateUserDto} createUserDto User Registration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -569,7 +598,7 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerInfo(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userControllerInfo(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResource>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerInfo(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -581,6 +610,15 @@ export const UsersApiFp = function(configuration?: Configuration) {
          */
         async userControllerLogin(loginRequest: LoginRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResource>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerLogin(loginRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerLogout(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerLogout(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -608,7 +646,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerInfo(options?: any): AxiosPromise<void> {
+        userControllerInfo(options?: any): AxiosPromise<UserResource> {
             return localVarFp.userControllerInfo(options).then((request) => request(axios, basePath));
         },
         /**
@@ -619,6 +657,14 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          */
         userControllerLogin(loginRequest: LoginRequest, options?: any): AxiosPromise<LoginResource> {
             return localVarFp.userControllerLogin(loginRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerLogout(options?: any): AxiosPromise<void> {
+            return localVarFp.userControllerLogout(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -658,6 +704,16 @@ export class UsersApi extends BaseAPI {
      */
     public userControllerLogin(loginRequest: LoginRequest, options?: AxiosRequestConfig) {
         return UsersApiFp(this.configuration).userControllerLogin(loginRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public userControllerLogout(options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerLogout(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
