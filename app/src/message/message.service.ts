@@ -34,8 +34,7 @@ export class MessageService {
     lastMessageId?: string,
     limit = 50,
   ): Promise<MessageResource[]> {
-    return this.messageModel
-      .find({ _id: lastMessageId ? { $lt: lastMessageId } : -1 }) // 最後のメッセージIDより前のメッセージを検索
+    return this.getMessages(lastMessageId) // 最後のメッセージIDより前のメッセージを検索
       .populate<{ userId: User }>('userId') // Userを参照
       .limit(limit)
       .exec()
@@ -50,5 +49,12 @@ export class MessageService {
           },
         })),
       );
+  }
+
+  getMessages(lastMessageId?: string) {
+    if (lastMessageId) {
+      return this.messageModel.find({ _id: { $lt: lastMessageId } });
+    }
+    return this.messageModel.find().sort({ _id: -1 });
   }
 }

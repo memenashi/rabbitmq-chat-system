@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { MessageService } from './message.service';
 import { MessageResource } from './dto/message.resource'; // MessageDtoとMessageTypeをインポート
 import { GetMessagesRequest } from './dto/get-messages.request';
@@ -31,16 +31,10 @@ export class MessageController {
 
   @Post('/find')
   @UseGuards(AuthGuard('jwt'))
-  @ApiQuery({
-    name: 'lastMessageId',
-    required: true,
-    description: 'ID of the last loaded message',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    description: 'Number of messages to load',
-  })
+  @ApiBody({
+    description: 'Entire Message find request',
+    type: GetMessagesRequest,
+  }) // リクエストボディの説明と型を指定
   @ApiOkResponse({
     description: 'List of messages before the specified message',
     type: MessageResource,
