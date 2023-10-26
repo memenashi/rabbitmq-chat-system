@@ -16,6 +16,7 @@ import { LoginRequest } from './dto/login.request';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginResource } from './dto/login.resource';
 import { AuthGuard } from '@nestjs/passport';
+import { SubscribeRequest } from './dto/subscribe.request';
 
 @ApiTags('users')
 @Controller('users')
@@ -75,5 +76,16 @@ export class UserController {
   @ApiOkResponse({ description: 'Logged Out.' })
   async logout(@Req() req: any, @Res() res: Response): Promise<void> {
     await this.authService.logout(req, res);
+  }
+
+  @Post('subscribe')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBody({ type: SubscribeRequest, description: 'Subscription' })
+  @ApiOkResponse({ description: 'Subscribed.' })
+  async subscribe(
+    @Req() req: any,
+    @Body('subscription') subscription: SubscribeRequest,
+  ): Promise<void> {
+    await this.userService.subscribe(req.user._id, subscription);
   }
 }
