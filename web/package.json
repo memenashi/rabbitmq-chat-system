@@ -13,10 +13,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
-    "yup": "^1.2.0"
+    "react-router": "^6.17.0",
+    "react-router-dom": "^6.17.0",
+    "yup": "^1.2.0",
+    "yup-locales": "^1.2.18"
   },
   "scripts": {
-    "start": "webpack serve --mode development",
+    "start": "webpack serve --mode development --watch",
     "build": "webpack --mode production",
     "api:generate": "openapi-generator-cli generate -i http://localhost:3201/api-yaml -g typescript-axios -o src/api/generated"
   },

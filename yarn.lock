@@ -2729,6 +2729,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remix-run/router@npm:1.10.0":
+  version: 1.10.0
+  resolution: "@remix-run/router@npm:1.10.0"
+  checksum: f8f9fcd5f08465a7e0a05378398ff6df2c5c5ef5766df3490a134d64260b3b16f1bd490bb0c3f5925c2671a0c1d8d1fa01dfbdc7ecc3b2447dc6eafe6b73bcc2
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -2872,6 +2879,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 4dee3d966fb527b98f0cbbdcf6977c9193fc3204ed539b7522fe5e64dfa45f9017bdda4ffb1f760062262fce7701a0ee1c2f6ce2e50af36c74d4e37052303172
+  languageName: node
+  linkType: hard
+
+"@types/cookie-parser@npm:^1.4.5":
+  version: 1.4.5
+  resolution: "@types/cookie-parser@npm:1.4.5"
+  dependencies:
+    "@types/express": "*"
+  checksum: 45855721706d6a57bb0441db11fb59db407414ea83a0000a0df80d19230447cc3bcc43c436397bfb8998ec78db222265fa8083456b00c5b5054a0c03d06f0086
   languageName: node
   linkType: hard
 
@@ -3936,6 +3952,7 @@ __metadata:
     "@nestjs/schematics": ^10.0.0
     "@nestjs/swagger": ^7.1.14
     "@nestjs/testing": ^10.0.0
+    "@types/cookie-parser": ^1.4.5
     "@types/express": ^4.17.17
     "@types/jest": ^29.5.2
     "@types/node": ^20.3.1
@@ -3943,6 +3960,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
     bcrypt: ^5.1.1
+    cookie-parser: ^1.4.6
     eslint: ^8.42.0
     eslint-config-prettier: ^9.0.0
     eslint-plugin-prettier: ^5.0.0
@@ -3950,6 +3968,7 @@ __metadata:
     mongoose: ^7.6.3
     passport: ^0.6.0
     passport-jwt: ^4.0.1
+    passport-local: ^1.0.0
     prettier: ^3.0.0
     reflect-metadata: ^0.1.13
     rxjs: ^7.8.1
@@ -5023,10 +5042,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie-parser@npm:^1.4.6":
+  version: 1.4.6
+  resolution: "cookie-parser@npm:1.4.6"
+  dependencies:
+    cookie: 0.4.1
+    cookie-signature: 1.0.6
+  checksum: 1e5a63aa82e8eb4e02d2977c6902983dee87b02e87ec5ec43ac3cb1e72da354003716570cd5190c0ad9e8a454c9d3237f4ad6e2f16d0902205a96a1c72b77ba5
+  languageName: node
+  linkType: hard
+
 "cookie-signature@npm:1.0.6":
   version: 1.0.6
   resolution: "cookie-signature@npm:1.0.6"
   checksum: f4e1b0a98a27a0e6e66fd7ea4e4e9d8e038f624058371bf4499cfcd8f3980be9a121486995202ba3fca74fbed93a407d6d54d43a43f96fd28d0bd7a06761591a
+  languageName: node
+  linkType: hard
+
+"cookie@npm:0.4.1":
+  version: 0.4.1
+  resolution: "cookie@npm:0.4.1"
+  checksum: bd7c47f5d94ab70ccdfe8210cde7d725880d2fcda06d8e375afbdd82de0c8d3b73541996e9ce57d35f67f672c4ee6d60208adec06b3c5fc94cebb85196084cf8
   languageName: node
   linkType: hard
 
@@ -9443,6 +9479,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"passport-local@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "passport-local@npm:1.0.0"
+  dependencies:
+    passport-strategy: 1.x.x
+  checksum: 86dc08b12f05f0ce1bb109780ccb0377eff45bbba70aa9c0d65f092b3ef476d344c0443517db2e9f3e5ec0ca849171ab25fb622164e0f69a677173af42b9bba7
+  languageName: node
+  linkType: hard
+
 "passport-strategy@npm:1.x.x, passport-strategy@npm:^1.0.0":
   version: 1.0.0
   resolution: "passport-strategy@npm:1.0.0"
@@ -9904,6 +9949,30 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
+"react-router-dom@npm:^6.17.0":
+  version: 6.17.0
+  resolution: "react-router-dom@npm:6.17.0"
+  dependencies:
+    "@remix-run/router": 1.10.0
+    react-router: 6.17.0
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: e0ba4f4c507681e2ffdecdf2e67edf7ec0e2bf4be35222e29d013afdb03866a5e6ecacc8b452bd55797b9672785d02f81bd6dbf6b05ac93a59e48e774b0060de
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.17.0, react-router@npm:^6.17.0":
+  version: 6.17.0
+  resolution: "react-router@npm:6.17.0"
+  dependencies:
+    "@remix-run/router": 1.10.0
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 99c30d94fbb34657e4c8c3ef1aaae33b143167d3869b442e06c83b4006f35200fde810029180e209654bef2f47f0b27a928f77cc2d859a358a2722cc9d494f03
   languageName: node
   linkType: hard
 
@@ -11750,6 +11819,8 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-hook-form: ^7.45.4
+    react-router: ^6.17.0
+    react-router-dom: ^6.17.0
     sass: ^1.57.1
     sass-loader: ^13.2.0
     style-loader: ^3.3.1
@@ -11759,6 +11830,7 @@ __metadata:
     webpack-cli: ^5.0.1
     webpack-dev-server: ^4.11.1
     yup: ^1.2.0
+    yup-locales: ^1.2.18
   languageName: unknown
   linkType: soft
 
@@ -12262,6 +12334,13 @@ __metadata:
   version: 1.0.0
   resolution: "yocto-queue@npm:1.0.0"
   checksum: 2cac84540f65c64ccc1683c267edce396b26b1e931aa429660aefac8fbe0188167b7aee815a3c22fa59a28a58d898d1a2b1825048f834d8d629f4c2a5d443801
+  languageName: node
+  linkType: hard
+
+"yup-locales@npm:^1.2.18":
+  version: 1.2.18
+  resolution: "yup-locales@npm:1.2.18"
+  checksum: e929555df880532a31973f693a0ae600522748ec08b6d0d4eff4a0d1f4af9f1d368712d74090a4b0025125e68cf95ab5d0abb9a55619f589c611181e2768dae0
   languageName: node
   linkType: hard
 
