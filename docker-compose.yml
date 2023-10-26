@@ -14,7 +14,7 @@ services:
       dockerfile: docker/Dockerfile.app
       context: .
     ports:
-      - "8080:3000"
+      - "8080:3200"
     depends_on:
       - rabbitmq
     command: [ "yarn", "workspace", "web", "start" ]
@@ -24,7 +24,7 @@ services:
       dockerfile: docker/Dockerfile.app
       context: .
     ports:
-      - "8081:3000"
+      - "8081:3201"
     depends_on:
       - rabbitmq
     command: [ "yarn", "workspace", "app", "start" ]
