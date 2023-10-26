@@ -9,29 +9,26 @@ services:
       - "15674:15674"
       - "5672:5672"
 
-  base_service:
-    build:
-      dockerfile: docker/Dockerfile.app
-      context: .
-    image: rabbit_chat:latest
-    
-
   web:
     image: rabbit_chat:latest
     ports:
       - "8080:3200"
     depends_on:
-      - base_service
+      - app
       - rabbitmq
     command: [ "yarn", "workspace", "web", "start" ]
 
   app:
+    build:
+      dockerfile: docker/Dockerfile.app
+      context: .
     image: rabbit_chat:latest
     ports:
       - "8081:3201"
     depends_on:
-      - base_service
       - rabbitmq
+    environment:
+      - MONGO_URL=mongodb://db:27017
     command: [ "yarn", "workspace", "app", "start" ]
 
   db:
