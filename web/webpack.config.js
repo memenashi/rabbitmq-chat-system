@@ -1,10 +1,11 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
   entry: "./src/index.tsx",
   output: {
-    path: path.join(__dirname, "public"),
+    path: path.join(__dirname, "dist"),
     filename: "main.js",
   },
   module: {
@@ -35,6 +36,9 @@ module.exports = {
       directory: path.join(__dirname, "public"),
     },
     port: 3200,
+    historyApiFallback: {
+      rewrites: [{ from: /^\/*/, to: '/index.html' }],
+    },
     proxy: {
       "/api": {
         target: process.env.API_SERVER || "http://localhost:3200",
@@ -46,4 +50,10 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", ".json"],
   },
   target: "web",
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+    }),
+  ],
 };
+
