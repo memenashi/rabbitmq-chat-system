@@ -1,6 +1,7 @@
 import { ThemeOptions, ThemeProvider, createTheme } from "@mui/material";
 import { FC } from "react";
 import { Router } from "./Router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const options: ThemeOptions = {
   typography: {
@@ -45,9 +46,14 @@ const options: ThemeOptions = {
 const theme = createTheme(options);
 
 export const App: FC = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: 1 } },
+  });
   return (
-    <ThemeProvider theme={theme}>
-      <Router />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };

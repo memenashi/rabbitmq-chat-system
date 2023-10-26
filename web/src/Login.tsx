@@ -1,5 +1,4 @@
 import { FC, useCallback, useState } from "react";
-import { Chat, LoginInfo } from "./Chat";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Stack,
@@ -12,12 +11,24 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { ObjectSchema, object, string } from "yup";
-import { userApi } from "./generated/api";
-import { LoginRequest } from "./generated/api";
+import { userApi } from "./api";
+import { Navigate, useNavigate } from "react-router-dom";
+import { LoginRequest } from "./api/generated";
+import { useLoginUser } from "./hooks/useLoginUser";
 
-const schema: ObjectSchema<LoginInfo> = object().shape({
-  username: string().min(1).max(16).required(),
-  password: string().required(),
+export const passwordSchema = string()
+  .required()
+  .min(8)
+  .max(24)
+  .matches(/^[a-zA-Z0-9.?\/-]{8,24}$/);
+
+export const displayNameSchema = string().required().min(1).max(32);
+
+export const mailSchema = string().email().required();
+
+const schema: ObjectSchema<LoginRequest> = object().shape({
+  email: mailSchema,
+  password: passwordSchema,
 });
 
 const LoginPaper = styled(Paper)(({ theme }) => ({
@@ -34,48 +45,64 @@ const LoginBackground = styled(Stack)(({ theme }) => ({
 }));
 
 export const Login: FC = () => {
+  const nav = useNavigate();
+  const { isSuccess, refetch } = useLoginUser();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginRequest>({
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
     resolver: yupResolver(schema),
   });
 
   const handleLogin = useCallback(
-    (data: LoginInfo) => {
-      userApi.userControllerLogin({
-        username: data.username,
-        password: data.password,
-      });
-    },
+    (data: LoginRequest) =>
+      userApi.userControllerLogin(data).then(() => {
+        nav("/");
+        refetch();
+      }),
     [register],
   );
+
+  if (status == "success") {
+    console.log("page blocked");
+    return <Navigate to="/" />;
+  }
 
   return (
     <LoginBackground alignItems="center">
       <LoginPaper>
         <Stack alignItems="center" gap={2}>
           <Typography variant="h3">おかえりなさい！</Typography>
-          <form onSubmit={handleSubmit()}>
+          <form onSubmit={handleSubmit(handleLogin)}>
             <Stack gap={2} width="100%">
-              <TextField {...register("username")} label="ユーザー名" />
-              {errors.username && (
-                <FormHelperText error>{errors.username.message}</FormHelperText>
+              <TextField {...register("email")} label="メールアドレス" />
+              {errors.email && (
+                <FormHelperText error>{errors.email.message}</FormHelperText>
               )}
               <TextField {...register("password")} label="パスワード" />
               {errors.password && (
                 <FormHelperText error>{errors.password.message}</FormHelperText>
               )}
-              <Button type="submit" variant="contained">
+              <Button disabled={isSubmitting} type="submit" variant="contained">
                 Login
               </Button>
             </Stack>
           </form>
+          <Typography variant="body1">はじめましてだったかな？</Typography>
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={() => {
+              nav("/register");
+            }}
+          >
+            登録する
+          </Button>
         </Stack>
       </LoginPaper>
     </LoginBackground>

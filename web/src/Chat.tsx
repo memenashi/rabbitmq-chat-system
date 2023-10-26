@@ -1,45 +1,16 @@
-import { Button, Paper, Stack, Typography } from "@mui/material";
-import { FC, useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { date, object, string } from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  DirectMessage,
-  EntireMessage,
-  Message,
-  useChatRoomClient,
-} from "./hooks/useChatRoomClient";
-import { SendMessageForm } from "./SendMessageForm";
-import { format } from "date-fns";
-import { MessageRow } from "./MessageRow";
+import { Paper, Stack, Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { FC } from "react";
+import { MessagesApi } from "./api/generated";
+import { messagesApi } from "./api";
 
-export interface LoginInfo {
-  username: string;
-  password: string;
-}
-
-const schema = object().shape({
-  body: string().min(1).max(256).required(),
-  type: string().oneOf(["message", "direct"]).required(),
-  to: string().when({
-    is: "direct",
-    then: (schema) => schema.min(1).max(16).required(),
-    otherwise: (schema) => schema.nullable(),
-  }),
-  from: string().required(),
-  publishDateTime: date().required(),
-});
-
-export const Chat: FC = (props) => {
+export const Chat: FC = () => {
+  const { data: messages } = useQuery({
+    queryKey: ["messages"],
+    queryFn: () => messagesApi.messageControllerFindBeforeLastMessage({}),
+  });
   return (
-    <Stack
-      gap={2}
-      height="100vh"
-      maxHeight="100vh"
-      minHeight="0"
-      padding={2}
-      overflow="auto"
-    >
+    <Stack gap={2} minHeight="0" padding={2} overflow="auto">
       <Paper
         elevation={4}
         sx={{
