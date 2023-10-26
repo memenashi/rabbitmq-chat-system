@@ -41,7 +41,7 @@ module.exports = {
     },
     proxy: {
       "/api": {
-        target: process.env.API_SERVER || "http://192.168.1.94:8081",
+        target: process.env.API_SERVER || "http://192.168.1.94:3201",
         secure: false,
         changeOrigin: true,
         pathRewrite: { "^/api": "" },

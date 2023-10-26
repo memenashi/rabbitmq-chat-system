@@ -72,7 +72,6 @@ export const Login: FC = () => {
   );
 
   if (data && status == "success") {
-    console.log("page blocked in login");
     return <Navigate to="/" />;
   }
 

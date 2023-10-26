@@ -5,7 +5,6 @@ import { ja } from "yup-locales";
 
 setLocale(ja);
 if ("serviceWorker" in navigator) {
-  console.log("serviceWorker in navigator");
   window.addEventListener("load", function () {
     navigator.serviceWorker
       .register("/sw.js")

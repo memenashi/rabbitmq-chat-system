@@ -207,13 +207,13 @@ export interface SubscribeRequest {
  */
 export interface SubscribeRequestKeys {
     /**
-     * P256dh key for the push subscription.
+     * Base64 encoded P256dh key for the push subscription.
      * @type {string}
      * @memberof SubscribeRequestKeys
      */
     'p256dh'?: string;
     /**
-     * Auth key for the push subscription.
+     * Base64 encoded Auth key for the push subscription.
      * @type {string}
      * @memberof SubscribeRequestKeys
      */

@@ -55,9 +55,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async login(@Body() LoginRequest: LoginRequest, @Res() res: Response) {
-    console.log('login', LoginRequest);
     await this.authService.login(LoginRequest, res);
-    console.log('login successful');
     res.send({ message: 'Login successful' });
   }
 
@@ -84,8 +82,9 @@ export class UserController {
   @ApiOkResponse({ description: 'Subscribed.' })
   async subscribe(
     @Req() req: any,
-    @Body('subscription') subscription: SubscribeRequest,
+    @Body() subscription: SubscribeRequest,
   ): Promise<void> {
+    console.log({ subscription });
     await this.userService.subscribe(req.user._id, subscription);
   }
 }

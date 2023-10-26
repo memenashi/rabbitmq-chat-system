@@ -8,6 +8,39 @@ import { isAxiosError } from "axios";
 import { useLoginUser } from "./hooks/useLoginUser";
 import { useQueryClient } from "@tanstack/react-query";
 
+const VAPID_PUBLIC_KEY =
+  "BEY2KR_22xD0gCtpctWnvehAyYAADw9ss_m1bT2Z8FUPmp650pi2cwL064JL6rg4PKrs9hiUg_JNiItUiG6gyQQ";
+
+const registerWebPush = async () => {
+  if ("serviceWorker" in navigator && "PushManager" in window) {
+    navigator.serviceWorker.ready.then(function (registration) {
+      registration.pushManager
+        .subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: VAPID_PUBLIC_KEY,
+        })
+        .then(function (subscription) {
+          console.log("User is subscribed:", subscription);
+
+          // このsubscriptionオブジェクトをサーバーに送信して保存します。
+          // 保存することで、後でこのユーザーにPush通知を送信する際に使用します。
+          // sendSubscriptionToServer(subscription);
+          userApi.userControllerSubscribe({
+            endpoint: subscription.endpoint,
+            expirationTime: subscription.expirationTime?.toString() ?? null,
+            keys: {
+              p256dh: (subscription.getKey("p256dh") as any) ?? undefined,
+              auth: (subscription.getKey("auth") as any) ?? undefined,
+            },
+          });
+        })
+        .catch(function (error) {
+          console.error("Failed to subscribe the user: ", error);
+        });
+    });
+  }
+};
+
 export const AppLayout: FC = () => {
   const nav = useNavigate();
   const queryClient = useQueryClient();
@@ -27,6 +60,7 @@ export const AppLayout: FC = () => {
             <Typography variant="h4">Rabbit-Chat</Typography>
             <Stack direction="row">
               <Button onClick={handleLogout}>Logout</Button>
+              <Button onClick={registerWebPush}>Push</Button>
             </Stack>
           </Stack>
         </Toolbar>

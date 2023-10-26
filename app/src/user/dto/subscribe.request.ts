@@ -16,16 +16,18 @@ export class SubscribeRequest {
     properties: {
       p256dh: {
         type: 'string',
-        description: 'P256dh key for the push subscription.',
+        format: 'base64',
+        description: 'Base64 encoded P256dh key for the push subscription.',
       },
       auth: {
         type: 'string',
-        description: 'Auth key for the push subscription.',
+        format: 'base64',
+        description: 'Base64 encoded Auth key for the push subscription.',
       },
     },
   })
   readonly keys: {
-    p256dh: string;
-    auth: string;
+    p256dh: string; // Base64 encoded
+    auth: string; // Base64 encoded
   };
 }
