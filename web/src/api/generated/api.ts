@@ -55,11 +55,11 @@ export interface CreateUserDto {
  */
 export interface LoginRequest {
     /**
-     * The unique username of the user
+     * The unique email of the user
      * @type {string}
      * @memberof LoginRequest
      */
-    'username': string;
+    'email': string;
     /**
      * The password of the user
      * @type {string}
@@ -78,48 +78,83 @@ export interface LoginResource {
      * @type {string}
      * @memberof LoginResource
      */
-    'access_token': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginResource
-     */
-    'username': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginResource
-     */
-    'email': string;
+    'message': string;
 }
 /**
  * 
  * @export
- * @interface MessageDto
+ * @interface MessageResource
  */
-export interface MessageDto {
+export interface MessageResource {
     /**
      * The content of the message
      * @type {string}
-     * @memberof MessageDto
+     * @memberof MessageResource
      */
     'content': string;
     /**
      * The type of the message
      * @type {string}
-     * @memberof MessageDto
+     * @memberof MessageResource
      */
-    'type': MessageDtoTypeEnum;
+    'type': MessageResourceTypeEnum;
+    /**
+     * The date the message was created
+     * @type {string}
+     * @memberof MessageResource
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {UserResource}
+     * @memberof MessageResource
+     */
+    'user': UserResource;
 }
 
-export const MessageDtoTypeEnum = {
+export const MessageResourceTypeEnum = {
     Message: 'message',
     Join: 'join',
     Leave: 'leave',
     Direct: 'direct'
 } as const;
 
-export type MessageDtoTypeEnum = typeof MessageDtoTypeEnum[keyof typeof MessageDtoTypeEnum];
+export type MessageResourceTypeEnum = typeof MessageResourceTypeEnum[keyof typeof MessageResourceTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface PostMessageRequest
+ */
+export interface PostMessageRequest {
+    /**
+     * The content of the message
+     * @type {string}
+     * @memberof PostMessageRequest
+     */
+    'content': string;
+    /**
+     * The type of the message
+     * @type {string}
+     * @memberof PostMessageRequest
+     */
+    'type': PostMessageRequestTypeEnum;
+    /**
+     * The user who receive the message
+     * @type {string}
+     * @memberof PostMessageRequest
+     */
+    'to': string;
+}
+
+export const PostMessageRequestTypeEnum = {
+    Message: 'message',
+    Join: 'join',
+    Leave: 'leave',
+    Direct: 'direct'
+} as const;
+
+export type PostMessageRequestTypeEnum = typeof PostMessageRequestTypeEnum[keyof typeof PostMessageRequestTypeEnum];
 
 /**
  * 
@@ -244,13 +279,13 @@ export const MessagesApiAxiosParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
-         * @param {MessageDto} messageDto Message payload
+         * @param {PostMessageRequest} postMessageRequest Message payload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerCreate: async (messageDto: MessageDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'messageDto' is not null or undefined
-            assertParamExists('messageControllerCreate', 'messageDto', messageDto)
+        messageControllerCreate: async (postMessageRequest: PostMessageRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postMessageRequest' is not null or undefined
+            assertParamExists('messageControllerCreate', 'postMessageRequest', postMessageRequest)
             const localVarPath = `/messages`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -270,7 +305,7 @@ export const MessagesApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(messageDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(postMessageRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -330,12 +365,12 @@ export const MessagesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {MessageDto} messageDto Message payload
+         * @param {PostMessageRequest} postMessageRequest Message payload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerCreate(messageDto: MessageDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerCreate(messageDto, options);
+        async messageControllerCreate(postMessageRequest: PostMessageRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerCreate(postMessageRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -345,7 +380,7 @@ export const MessagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageResource>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindBeforeLastMessage(lastMessageId, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -361,12 +396,12 @@ export const MessagesApiFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 
-         * @param {MessageDto} messageDto Message payload
+         * @param {PostMessageRequest} postMessageRequest Message payload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerCreate(messageDto: MessageDto, options?: any): AxiosPromise<void> {
-            return localVarFp.messageControllerCreate(messageDto, options).then((request) => request(axios, basePath));
+        messageControllerCreate(postMessageRequest: PostMessageRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.messageControllerCreate(postMessageRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -375,7 +410,7 @@ export const MessagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: any): AxiosPromise<void> {
+        messageControllerFindBeforeLastMessage(lastMessageId: string, limit?: number, options?: any): AxiosPromise<Array<MessageResource>> {
             return localVarFp.messageControllerFindBeforeLastMessage(lastMessageId, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -390,13 +425,13 @@ export const MessagesApiFactory = function (configuration?: Configuration, baseP
 export class MessagesApi extends BaseAPI {
     /**
      * 
-     * @param {MessageDto} messageDto Message payload
+     * @param {PostMessageRequest} postMessageRequest Message payload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MessagesApi
      */
-    public messageControllerCreate(messageDto: MessageDto, options?: AxiosRequestConfig) {
-        return MessagesApiFp(this.configuration).messageControllerCreate(messageDto, options).then((request) => request(this.axios, this.basePath));
+    public messageControllerCreate(postMessageRequest: PostMessageRequest, options?: AxiosRequestConfig) {
+        return MessagesApiFp(this.configuration).messageControllerCreate(postMessageRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -420,6 +455,35 @@ export class MessagesApi extends BaseAPI {
  */
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerInfo: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {LoginRequest} loginRequest User Login
@@ -502,6 +566,15 @@ export const UsersApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerInfo(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerInfo(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {LoginRequest} loginRequest User Login
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -532,6 +605,14 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerInfo(options?: any): AxiosPromise<void> {
+            return localVarFp.userControllerInfo(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {LoginRequest} loginRequest User Login
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -558,6 +639,16 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class UsersApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public userControllerInfo(options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerInfo(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {LoginRequest} loginRequest User Login

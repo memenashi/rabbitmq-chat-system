@@ -1,4 +1,4 @@
-import { UsersApiFactory } from "./api/api";
+import { UsersApiFactory } from "./generated";
 
 const basePath = "/api";
 
