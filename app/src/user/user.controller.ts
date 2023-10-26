@@ -1,4 +1,5 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { UserService } from './user.service';
 import { ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/user.request';
@@ -25,13 +26,9 @@ export class UserController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async register(
-    @Body() {username,password,email}: CreateUserDto,
+    @Body() { username, password, email }: CreateUserDto,
   ): Promise<UserResource> {
-    const user = await this.userService.create(
-      username,
-      password,
-      email,
-    );
+    const user = await this.userService.create(username, password, email);
     return {
       username: user.username,
       email: user.email,
@@ -40,21 +37,17 @@ export class UserController {
 
   @Post('login')
   @ApiBody({ type: LoginRequest, description: 'User Login' })
-  @ApiResponse({ status: 200, description: 'User successfully logged in', type: LoginResource })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged in',
+    type: LoginResource,
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async login(
-    @Body() {username,password}:LoginRequest
-  ) : Promise<LoginResource> {
-    const user = await this.authService.validateUser(username, password);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    const token =await this.authService.login(user);
-    return {
-      access_token: token.access_token,
-      username: user.username,
-      email: user.email,
-    }
+  async login(@Body() LoginRequest: LoginRequest, @Res() res: Response) {
+    console.log('login', LoginRequest);
+    await this.authService.login(LoginRequest, res);
+    console.log('login successful');
+    res.send({ message: 'Login successful' });
   }
 }

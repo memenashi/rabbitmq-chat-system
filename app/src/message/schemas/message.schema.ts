@@ -9,8 +9,8 @@ export class Message {
   @Prop({ required: true })
   content: string;
 
-  @Prop({ required: true, type: SchemaTypes.ObjectId, ref: 'User' })  // Userを参照
-  userId: ObjectId;
+  @Prop({ required: true, type: SchemaTypes.ObjectId, ref: 'User' }) // Userを参照
+  userId: { type: ObjectId; ref: 'User' };
 
   @Prop({ default: Date.now })
   createdAt: Date;
