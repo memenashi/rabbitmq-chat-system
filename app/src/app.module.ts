@@ -8,9 +8,12 @@ import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017', {
-      auth: { password: '123root', username: 'root' },
-    }),
+    MongooseModule.forRoot(
+      process.env.MONGO_URL || 'mongodb://localhost:27017',
+      {
+        auth: { password: '123root', username: 'root' },
+      },
+    ),
     UserModule,
     AuthModule,
     MessageModule,

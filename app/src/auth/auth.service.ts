@@ -9,6 +9,10 @@ import { User, UserDocument } from 'src/user/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
+  logout(req: any, res: Response<any, Record<string, any>>) {
+    res.clearCookie('Authentication');
+    res.send({ message: 'Logout successful' });
+  }
   constructor(
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private userModel: Model<UserDocument>,

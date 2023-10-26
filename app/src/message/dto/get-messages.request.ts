@@ -4,6 +4,7 @@ export class GetMessagesRequest {
   @ApiProperty({
     description: 'The ID of the last loaded message',
     required: false,
+    default: '',
   })
   lastMessageId?: string;
 

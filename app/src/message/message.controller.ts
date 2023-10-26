@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MessageService } from './message.service';
 import { MessageResource } from './dto/message.resource'; // MessageDtoとMessageTypeをインポート
@@ -37,7 +29,7 @@ export class MessageController {
     return message;
   }
 
-  @Get()
+  @Post('/find')
   @UseGuards(AuthGuard('jwt'))
   @ApiQuery({
     name: 'lastMessageId',
@@ -55,7 +47,7 @@ export class MessageController {
     isArray: true,
   })
   async findBeforeLastMessage(
-    @Query() getMessagesDto: GetMessagesRequest,
+    @Body() getMessagesDto: GetMessagesRequest,
   ): Promise<MessageResource[]> {
     return this.messageService.findBeforeLastMessage(
       getMessagesDto.lastMessageId,

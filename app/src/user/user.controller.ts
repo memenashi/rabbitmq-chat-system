@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
-import { ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiResponse, ApiOkResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/user.request';
 import { UserResource } from './dto/user.resource';
 import { LoginRequest } from './dto/login.request';
@@ -62,10 +62,18 @@ export class UserController {
 
   @Get('info')
   @UseGuards(AuthGuard('jwt'))
+  @ApiOkResponse({ type: UserResource, description: 'User Info' })
   async info(@Req() req: any): Promise<UserResource> {
     return {
       username: req.user.username,
       email: req.user.email,
     };
+  }
+
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOkResponse({ description: 'Logged Out.' })
+  async logout(@Req() req: any, @Res() res: Response): Promise<void> {
+    await this.authService.logout(req, res);
   }
 }
