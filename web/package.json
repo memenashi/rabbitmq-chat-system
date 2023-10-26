@@ -17,7 +17,11 @@
   },
   "scripts": {
     "start": "webpack serve --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "api:generate": "openapi-generator-cli generate -i http://localhost:3201/api-yaml -g typescript-axios -o src/api"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "yarn@3.6.4",
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0"
+  }
 }
