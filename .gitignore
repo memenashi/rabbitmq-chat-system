@@ -132,3 +132,5 @@ dist
 *.pptx
 *.pdf
 .openapi-generator
+
+slide/**/*.html
