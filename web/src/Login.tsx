@@ -50,7 +50,7 @@ const StyledForm = styled("form")(({ theme }) => ({
 
 export const Login: FC = () => {
   const nav = useNavigate();
-  const { status, refetch } = useLoginUser();
+  const { data, status, refetch } = useLoginUser();
   const {
     register,
     handleSubmit,
@@ -64,15 +64,18 @@ export const Login: FC = () => {
   });
 
   const handleLogin = useCallback(
-    (data: LoginRequest) =>
-      userApi.userControllerLogin(data).then(() => {
+    async (data: LoginRequest) => {
+      try {
+        await userApi.userControllerLogin(data);
         refetch();
-      }),
+      } catch (_e) {
+        console.log("error");
+      }
+    },
     [refetch],
   );
 
-  if (status == "success") {
-    console.log("page blocked in login");
+  if (data && status == "success") {
     return <Navigate to="/" />;
   }
 
@@ -87,7 +90,11 @@ export const Login: FC = () => {
               {errors.email && (
                 <FormHelperText error>{errors.email.message}</FormHelperText>
               )}
-              <TextField {...register("password")} label="パスワード" />
+              <TextField
+                type="password"
+                {...register("password")}
+                label="パスワード"
+              />
               {errors.password && (
                 <FormHelperText error>{errors.password.message}</FormHelperText>
               )}

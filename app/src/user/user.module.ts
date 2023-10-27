@@ -6,6 +6,10 @@ import { User, UserSchema } from 'src/user/schemas/user.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from 'src/auth/auth.module';
+import {
+  Subscription,
+  SubscriptionSchema,
+} from './schemas/subscription.schema';
 
 @Module({
   imports: [
@@ -13,9 +17,12 @@ import { AuthModule } from 'src/auth/auth.module';
     AuthModule,
     JwtModule.register({
       secret: 'YOUR_SECRET_KEY',
-      signOptions: { expiresIn: '60m' },
+      signOptions: { expiresIn: '7d' },
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Subscription.name, schema: SubscriptionSchema },
+    ]),
   ],
   providers: [UserService],
   controllers: [UserController],

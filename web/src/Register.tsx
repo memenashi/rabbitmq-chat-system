@@ -80,7 +80,12 @@ export const Register = () => {
               name="email"
               render={({ field: { ref, ...field }, fieldState: { error } }) => (
                 <Stack gap={0}>
-                  <TextField {...field} label="メールアドレス" inputRef={ref} />
+                  <TextField
+                    {...field}
+                    label="メールアドレス"
+                    autoComplete="username"
+                    inputRef={ref}
+                  />
                   <FormHelperText error>{error?.message ?? " "}</FormHelperText>
                 </Stack>
               )}
@@ -105,6 +110,7 @@ export const Register = () => {
                     {...field}
                     label="パスワード"
                     inputRef={ref}
+                    autoComplete="new-password"
                   />
                   <FormHelperText error>{error?.message ?? " "}</FormHelperText>
                 </Stack>
@@ -120,6 +126,7 @@ export const Register = () => {
                     {...field}
                     label="パスワード(確認)"
                     inputRef={ref}
+                    autoComplete="new-password"
                   />
                   <FormHelperText error>{error?.message ?? " "}</FormHelperText>
                 </Stack>

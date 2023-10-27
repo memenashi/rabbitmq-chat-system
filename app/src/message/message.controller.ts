@@ -19,12 +19,12 @@ export class MessageController {
     @Body() createMessageDto: PostMessageRequest, // DTOを使用してリクエストボディをバインド
     @Req() req: any,
   ): Promise<MessageResource> {
-    console.log('message posted', req.user, createMessageDto);
     const userId = req.user._id;
     const message = await this.messageService.create(
       createMessageDto.content,
       userId,
       createMessageDto.type,
+      req,
     ); // DTOからcontentを取得
     return message;
   }

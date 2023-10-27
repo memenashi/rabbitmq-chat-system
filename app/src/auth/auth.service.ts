@@ -20,16 +20,14 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userModel.findOne({ email });
-    if (user && password != user.password) {
+    if (!user || password != user.password) {
       throw new UnauthorizedException();
     }
     return user;
   }
 
   async login({ email, password }: LoginRequest, res: Response) {
-    console.log('validating user');
     const user = await this.validateUser(email, password);
-    console.log('user', user);
     const payload = { username: user.username, sub: user._id }; // _idを含めることでユーザーを特定
     const token = this.jwtService.sign(payload);
 
@@ -39,7 +37,6 @@ export class AuthService {
       // secure: true,  // HTTPSを使用している場合のみこのオプションを有効にする
       expires: new Date(Date.now() + 7 * 24 * 60 * 60), // 1週間後に有効期限切れとする例
     };
-    console.log('setting cookie');
     // トークンをHTTP Only Cookieとしてセット
     res.cookie('Authentication', token, cookieOptions);
   }

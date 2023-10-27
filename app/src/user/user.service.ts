@@ -2,10 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/user/schemas/user.schema';
+import { SubscribeRequest } from './dto/subscribe.request';
+import {
+  Subscription,
+  SubscriptionDocument,
+} from './schemas/subscription.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Subscription.name)
+    private subscriptionModel: Model<SubscriptionDocument>,
+  ) {}
 
   async create(
     username: string,
@@ -22,5 +31,27 @@ export class UserService {
 
   async findUserByUsername(username: string): Promise<User> {
     return this.userModel.findOne({ username });
+  }
+
+  async findSubscriptionWithoutMe(): Promise<Subscription[]> {
+    return this.subscriptionModel.find().exec();
+  }
+
+  async subscribe(
+    userId: string,
+    request: SubscribeRequest,
+  ): Promise<Subscription> {
+    const user = await this.userModel.findById(userId);
+    const subscription = await this.subscriptionModel.create({
+      userId: user._id,
+      endpoint: request.endpoint,
+      expirationTime: request.expirationTime,
+      keys: request.keys,
+    });
+    console.log(subscription);
+    await subscription.save();
+    user.subscriptions.push(subscription._id);
+    await user.save();
+    return subscription;
   }
 }

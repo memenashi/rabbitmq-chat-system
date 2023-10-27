@@ -8,10 +8,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { messagesApi } from "../api";
 
 const schema: ObjectSchema<PostMessageRequest> = object().shape({
-  content: string()
-    .required()
-    .min(1)
-    .max(2 ^ 10),
+  content: string().required().min(1).max(4096),
   to: string().required(),
   type: string()
     .required()
@@ -23,25 +20,26 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   flexGrow: 1,
 }));
 
+const defaultValues: PostMessageRequest = {
+  content: "",
+  to: "undefined",
+  type: "message",
+};
+
 export const PostArea: FC<{ onSubmit?: () => void }> = ({ onSubmit }) => {
   const {
-    register,
     handleSubmit,
     reset,
     control,
     formState: { isSubmitting, isValid },
   } = useForm<PostMessageRequest>({
-    defaultValues: {
-      content: "",
-      to: "undefined",
-      type: "message",
-    },
+    defaultValues,
     resolver: yupResolver(schema),
   });
 
   const submitHandler = async (data: PostMessageRequest) => {
     await messagesApi.messageControllerCreate(data);
-    reset();
+    reset(defaultValues);
     onSubmit?.();
   };
 
