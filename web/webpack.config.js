@@ -37,16 +37,16 @@ module.exports = {
     },
     port: 3200,
     historyApiFallback: {
-      rewrites: [{ from: /^\/*/, to: '/index.html' }],
+      rewrites: [{ from: /^\/*/, to: "/index.html" }],
     },
     proxy: {
       "/api": {
-        target: process.env.API_SERVER || "http://192.168.1.94:3201",
+        target: process.env.API_SERVER || "http://10.1.232.32:3201",
         secure: false,
         changeOrigin: true,
         pathRewrite: { "^/api": "" },
-      }
-    }
+      },
+    },
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
@@ -58,4 +58,3 @@ module.exports = {
     }),
   ],
 };
-

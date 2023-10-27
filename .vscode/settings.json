@@ -1,6 +1,6 @@
 {
   "markdown.marp.themes": [
-    "slide/blueprint.css"
+    "https://raw.githubusercontent.com/memenashi/marp-theme/master/css/blueprint.css"
   ],
   "cSpell.words": [
     "Rasics"

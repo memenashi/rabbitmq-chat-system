@@ -17,7 +17,7 @@ import {
     AuthModule,
     JwtModule.register({
       secret: 'YOUR_SECRET_KEY',
-      signOptions: { expiresIn: '60m' },
+      signOptions: { expiresIn: '7d' },
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },

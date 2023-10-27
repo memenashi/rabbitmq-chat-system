@@ -20,7 +20,7 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userModel.findOne({ email });
-    if (user && password != user.password) {
+    if (!user || password != user.password) {
       throw new UnauthorizedException();
     }
     return user;

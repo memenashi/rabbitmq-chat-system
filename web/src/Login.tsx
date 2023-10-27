@@ -64,10 +64,14 @@ export const Login: FC = () => {
   });
 
   const handleLogin = useCallback(
-    (data: LoginRequest) =>
-      userApi.userControllerLogin(data).then(() => {
+    async (data: LoginRequest) => {
+      try {
+        await userApi.userControllerLogin(data);
         refetch();
-      }),
+      } catch (_e) {
+        console.log("error");
+      }
+    },
     [refetch],
   );
 
@@ -86,7 +90,11 @@ export const Login: FC = () => {
               {errors.email && (
                 <FormHelperText error>{errors.email.message}</FormHelperText>
               )}
-              <TextField {...register("password")} label="パスワード" />
+              <TextField
+                type="password"
+                {...register("password")}
+                label="パスワード"
+              />
               {errors.password && (
                 <FormHelperText error>{errors.password.message}</FormHelperText>
               )}

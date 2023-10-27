@@ -24,8 +24,8 @@ export class MessageController {
       createMessageDto.content,
       userId,
       createMessageDto.type,
+      req,
     ); // DTOからcontentを取得
-    this.messageService.sendNotification(message);
     return message;
   }
 

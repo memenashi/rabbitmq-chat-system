@@ -7,37 +7,37 @@ import e from "express";
 import { isAxiosError } from "axios";
 import { useLoginUser } from "./hooks/useLoginUser";
 import { useQueryClient } from "@tanstack/react-query";
+import { arrayBufferToBase64 } from "./utils/arrayBufferToBase64";
 
 const VAPID_PUBLIC_KEY =
-  "BEY2KR_22xD0gCtpctWnvehAyYAADw9ss_m1bT2Z8FUPmp650pi2cwL064JL6rg4PKrs9hiUg_JNiItUiG6gyQQ";
+  "BOEhiGHpSfyAmoGU_Kg7H8EQqZ6TfkvyyG98S5nh-4omLebX5fsCDup9ORt4LZaVyYVJy8flLYYnTS-FOUSc92Q";
 
 const registerWebPush = async () => {
   if ("serviceWorker" in navigator && "PushManager" in window) {
-    navigator.serviceWorker.ready.then(function (registration) {
-      registration.pushManager
-        .subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: VAPID_PUBLIC_KEY,
-        })
-        .then(function (subscription) {
-          console.log("User is subscribed:", subscription);
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: VAPID_PUBLIC_KEY,
+      });
+      console.log("User is subscribed:", subscription);
 
-          // このsubscriptionオブジェクトをサーバーに送信して保存します。
-          // 保存することで、後でこのユーザーにPush通知を送信する際に使用します。
-          // sendSubscriptionToServer(subscription);
-          userApi.userControllerSubscribe({
-            endpoint: subscription.endpoint,
-            expirationTime: subscription.expirationTime?.toString() ?? null,
-            keys: {
-              p256dh: (subscription.getKey("p256dh") as any) ?? undefined,
-              auth: (subscription.getKey("auth") as any) ?? undefined,
-            },
-          });
-        })
-        .catch(function (error) {
-          console.error("Failed to subscribe the user: ", error);
-        });
-    });
+      const p256dh = subscription.getKey("p256dh");
+      const auth = subscription.getKey("auth");
+      console.log({ p256dh, auth });
+      // このsubscriptionオブジェクトをサーバーに送信して保存します。
+      // 保存することで、後でこのユーザーにPush通知を送信する際に使用します。
+      await userApi.userControllerSubscribe({
+        endpoint: subscription.endpoint,
+        expirationTime: subscription.expirationTime?.toString() ?? null,
+        keys: {
+          p256dh: arrayBufferToBase64(p256dh) ?? undefined,
+          auth: arrayBufferToBase64(auth) ?? undefined,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to subscribe the user: ", error);
+    }
   }
 };
 

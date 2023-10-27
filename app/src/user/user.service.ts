@@ -33,6 +33,10 @@ export class UserService {
     return this.userModel.findOne({ username });
   }
 
+  async findSubscriptionWithoutMe(): Promise<Subscription[]> {
+    return this.subscriptionModel.find().exec();
+  }
+
   async subscribe(
     userId: string,
     request: SubscribeRequest,
@@ -40,8 +44,11 @@ export class UserService {
     const user = await this.userModel.findById(userId);
     const subscription = await this.subscriptionModel.create({
       userId: user._id,
-      ...request,
+      endpoint: request.endpoint,
+      expirationTime: request.expirationTime,
+      keys: request.keys,
     });
+    console.log(subscription);
     await subscription.save();
     user.subscriptions.push(subscription._id);
     await user.save();

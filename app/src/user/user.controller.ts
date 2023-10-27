@@ -84,7 +84,6 @@ export class UserController {
     @Req() req: any,
     @Body() subscription: SubscribeRequest,
   ): Promise<void> {
-    console.log({ subscription });
     await this.userService.subscribe(req.user._id, subscription);
   }
 }
