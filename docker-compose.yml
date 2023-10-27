@@ -16,7 +16,7 @@ services:
     depends_on:
       - app
       - rabbitmq
-    command: [ "yarn", "workspace", "web", "start" ]
+    command: ["yarn", "workspace", "web", "start"]
 
   app:
     build:
@@ -29,7 +29,7 @@ services:
       - rabbitmq
     environment:
       - MONGO_URL=mongodb://db:27017
-    command: [ "yarn", "workspace", "app", "start" ]
+    command: ["yarn", "workspace", "app", "start"]
 
   db:
     image: mongo:latest
@@ -43,5 +43,3 @@ services:
 
 volumes:
   mongodb-data:
-
-

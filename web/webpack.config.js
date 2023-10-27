@@ -39,6 +39,7 @@ module.exports = {
     historyApiFallback: {
       rewrites: [{ from: /^\/*/, to: "/index.html" }],
     },
+    https: true,
     proxy: {
       "/api": {
         target: process.env.API_SERVER || "http://10.1.232.32:3201",
