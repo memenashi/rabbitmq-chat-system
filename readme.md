@@ -1,20 +1,20 @@
-# Rabbit MQ Chat system
+# RabbitChat
 
 ## Description
 
-This is a simple chat system using Rabbit MQ as a message broker.
-It is written in typescript and uses the amqplib library to connect to Rabbit MQ.
+シンプルなチャットシステムを習作しましたので公開します。
 
 ## How to run
 
-all you need is to run `docker compose up -d`
+1. `docker compose up -d`
+2. [https://localhost:8080](http://localhost:8080) にアクセス
 
 ## Directories
 
-### api
+### app
 
-This is the api for the chat system. It is a simple express server that uses socket.io to communicate with the client.
+チャットシステムのサーバーです。NestJSで記載されています。
 
 ### web
 
-This is the web client for the chat system. It is a simple react app that uses socket.io to communicate with the server.
+チャットシステムのフロントエンドです。React/Typescriptで記載されています。
