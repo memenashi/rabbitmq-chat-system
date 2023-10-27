@@ -16,6 +16,8 @@ services:
     depends_on:
       - app
       - rabbitmq
+    environment:
+      - API_SERVER=http://app:3201
     command: ["yarn", "workspace", "web", "start"]
 
   app:
