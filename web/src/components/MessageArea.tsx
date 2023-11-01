@@ -1,6 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import { messagesApi } from "../api";
 import { Stack } from "@mui/material";
 import { MessageRow } from "./MessageRow";
 import { MessageResource } from "../api/generated";

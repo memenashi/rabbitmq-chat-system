@@ -3,8 +3,6 @@ import { Layout } from "./Layout";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AppBar, Button, Stack, Toolbar, Typography } from "@mui/material";
 import { userApi } from "./api";
-import e from "express";
-import { isAxiosError } from "axios";
 import { useLoginUser } from "./hooks/useLoginUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { arrayBufferToBase64 } from "./utils/arrayBufferToBase64";
@@ -48,7 +46,9 @@ export const AppLayout: FC = () => {
   const handleLogout = useCallback(async () => {
     try {
       await userApi.userControllerLogout();
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
     queryClient.clear();
     nav("/login");
   }, [refetch, nav]);

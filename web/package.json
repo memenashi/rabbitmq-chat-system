@@ -22,6 +22,8 @@
     "yup-locales": "^1.2.18"
   },
   "scripts": {
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "start": "webpack serve --mode development --watch",
     "build": "webpack --mode production",
     "api:generate": "openapi-generator-cli generate -i http://localhost:8081/api-yaml -g typescript-axios -o src/api/generated"

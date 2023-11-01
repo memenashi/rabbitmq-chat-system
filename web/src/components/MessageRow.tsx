@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import { memo } from "react";
 import { MessageResource } from "../api/generated";
 import { Stack, Typography, styled } from "@mui/material";
 import { format } from "date-fns";

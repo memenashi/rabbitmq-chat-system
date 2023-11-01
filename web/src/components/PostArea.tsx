@@ -15,10 +15,10 @@ const schema: ObjectSchema<PostMessageRequest> = object().shape({
     .oneOf(["message", "join", "leave", "direct"] as const),
 });
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
+const CustomTextField = styled(TextField)({
   minWidth: 0,
   flexGrow: 1,
-}));
+});
 
 const defaultValues: PostMessageRequest = {
   content: "",

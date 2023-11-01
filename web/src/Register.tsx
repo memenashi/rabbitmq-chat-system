@@ -8,7 +8,7 @@ import {
   styled,
 } from "@mui/material";
 import { useCallback } from "react";
-import { CreateUserDto, UsersApi } from "./api/generated";
+import { CreateUserDto } from "./api/generated";
 import { userApi } from "./api";
 import { useNavigate } from "react-router";
 import { routes } from "./Router";
@@ -55,11 +55,7 @@ export const Register = () => {
     nav(routes.chat);
   }, []);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting, isValid },
-  } = useForm<RegisterFormValue>({
+  const { control, handleSubmit } = useForm<RegisterFormValue>({
     defaultValues: {
       email: "",
       password: "",

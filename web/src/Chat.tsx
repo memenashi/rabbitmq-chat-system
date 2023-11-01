@@ -1,7 +1,6 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import { MessagesApi } from "./api/generated";
 import { messagesApi } from "./api";
 import { MessageArea } from "./components/MessageArea";
 import { PostArea } from "./components/PostArea";

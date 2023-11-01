@@ -1,6 +1,6 @@
 import { FC, memo } from "react";
 import { DirectMessage, Message } from "./hooks/useChatRoomClient";
-import { Paper, Stack, Typography, styled } from "@mui/material";
+import { Paper, Typography, styled } from "@mui/material";
 
 const RowPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),

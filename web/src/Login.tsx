@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Stack,
@@ -20,7 +20,7 @@ export const passwordSchema = string()
   .required()
   .min(8)
   .max(24)
-  .matches(/^[a-zA-Z0-9.?\/-]{8,24}$/);
+  .matches(/^[a-zA-Z0-9.?/-]{8,24}$/);
 
 export const displayNameSchema = string().required().min(1).max(32);
 
@@ -44,9 +44,9 @@ const LoginBackground = styled(Stack)(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const StyledForm = styled("form")(({ theme }) => ({
+const StyledForm = styled("form")({
   width: "100%",
-}));
+});
 
 export const Login: FC = () => {
   const nav = useNavigate();
